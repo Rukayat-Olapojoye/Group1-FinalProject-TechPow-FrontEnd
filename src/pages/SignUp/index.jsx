@@ -6,7 +6,7 @@ import axios from 'axios';
 import { AppContext } from '../../components/AppStateProvider';
 import DefaultLayout from '../../components/Layout/DefaultLayout';
 import { css } from "@emotion/react";
-import  BeatLoader from "react-spinners/BeatLoader";
+import BeatLoader from "react-spinners/BeatLoader";
 
 //import styles
 import './style.css';
@@ -57,6 +57,10 @@ export default function Signup() {
         //return (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@#$%^&!]{8,}$/).test(data)
     };
 
+
+
+
+
     const registerUser = ({ username, email, password, confirmPassword, role }) => {
 
         if (!username) {
@@ -86,6 +90,7 @@ export default function Signup() {
             typeofuser: role
         };
 
+        setLoading(true);
         // console.log(newUser);
         axios.post('https://donationappwebapi20211005103856.azurewebsites.net/api/v1/Auth/Register',
             newUser)
@@ -93,6 +98,7 @@ export default function Signup() {
                 console.log(result);
                 if (result.data.success) {
                     toast.success(result.data.message);
+                    setLoading(false);
                     context.dispatch({
                         type: 'REGISTER',
                         payload: {
@@ -131,12 +137,6 @@ export default function Signup() {
             })
     };
 
-    const displayLoader = () => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading({ loading: false});
-        }, 1000)
-    }
 
 
     return (
@@ -227,10 +227,10 @@ export default function Signup() {
                                     <p>By signing up, you agree to the <strong className="bold-text"><a href="/TermsOfUse" className="bold-text">Terms of Service </a></strong>and <strong className="bold-text"><a href="/PrivacyPolicy" className="bold-text">Privacy Policy</a></strong>.</p>
                                 </div>
                                 <div className="last-flex sweet-loading">
-                                    <button type="submit" className="btn btn-primary" onClick={displayLoader} disabled={loading}>
-                                        { loading && (<div><BeatLoader color={color} css={overrride} size={15} />
-                                            </div>)}
-                                        { !loading && <span>Create Account</span>}
+                                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                                        {loading && (<div><BeatLoader color={color} css={overrride} size={15} />
+                                        </div>)}
+                                        {!loading && <span>Create Account</span>}
                                     </button>
                                 </div>
                                 <p>Already have an account? <a className="green" href="/Login">Log in</a></p>
